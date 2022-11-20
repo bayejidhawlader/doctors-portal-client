@@ -1,9 +1,17 @@
+import { data } from "autoprefixer";
 import { format } from "date-fns";
-import React from "react";
+import React, { useContext } from "react";
+import toast from "react-hot-toast";
+import { AuthContext } from "../../../contexts/AuthProvicer";
 
-const BookingModal = ({ tretment, setTretment, selectedData }) => {
-  const { name, slots } = tretment; // tretment is appoinment option, just diffrent name
+const BookingModal = ({ tretment, setTretment, selectedData, refetch }) => {
+  // tretment is just another name of appoinmentOptions with name
+  const { name: tretmentName, slots } = tretment;
   const date = format(selectedData, "PP");
+
+  // Show email to Appoinment Modal Input Box
+  const { user } = useContext(AuthContext);
+
   const handleBooking = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -13,7 +21,7 @@ const BookingModal = ({ tretment, setTretment, selectedData }) => {
     const phone = form.phone.value;
     const booking = {
       appoinmentData: date,
-      tretment: name,
+      tretment: tretmentName,
       slot,
       patient: name,
       email,
@@ -24,8 +32,25 @@ const BookingModal = ({ tretment, setTretment, selectedData }) => {
     // TODO: send data to server
     // and once data is saved then colse the modal
     // and Display success Toast
-    console.log(booking);
-    setTretment(null);
+    // 04 Appoinment Modal sumbit mongodb database received index.js => server
+    fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          setTretment(null);
+          toast.success("Booking confirmed");
+          refetch();
+        } else {
+          toast.error(data.message);
+        }
+      });
   };
   return (
     <>
@@ -38,7 +63,7 @@ const BookingModal = ({ tretment, setTretment, selectedData }) => {
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold">{name}</h3>
+          <h3 className="text-lg font-bold">{tretmentName}</h3>
           <form
             onSubmit={handleBooking}
             className="grid grid-cols-1 gap-6 mt-6"
@@ -60,6 +85,8 @@ const BookingModal = ({ tretment, setTretment, selectedData }) => {
             </select>
             <input
               required
+              disabled
+              defaultValue={user?.displayName}
               name="name"
               type="text"
               placeholder="Your Name"
@@ -67,6 +94,8 @@ const BookingModal = ({ tretment, setTretment, selectedData }) => {
             />
             <input
               required
+              disabled
+              defaultValue={user?.email}
               name="email"
               type="email"
               placeholder="Email Address"

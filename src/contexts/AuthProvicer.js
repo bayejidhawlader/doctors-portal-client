@@ -30,7 +30,7 @@ const AuthProvicer = ({ children }) => {
 
   // Update Profile
   const updateUser = (userInfo) => {
-    return updateProfile(user, userInfo);
+    return updateProfile(auth.currentUser, userInfo);
   };
 
   // sing out
@@ -41,7 +41,7 @@ const AuthProvicer = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("User Oversrving");
+      // console.log("User Oversrving");
       setUser(currentUser);
       setLoading(false);
     });

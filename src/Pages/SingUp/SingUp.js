@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvicer";
+import useToken from "../../hooks/useToken";
 
 const SingUp = () => {
   const {
@@ -14,6 +15,14 @@ const SingUp = () => {
 
   // Sing Up error
   const [singUpError, setSingUpError] = useState("");
+
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
+  const [token] = useToken(createdUserEmail);
+  const navigate = useNavigate();
+
+  if (token) {
+    navigate("/");
+  }
 
   const handleSingUp = (data) => {
     console.log(data);
@@ -27,7 +36,9 @@ const SingUp = () => {
           displayName: data.name,
         };
         updateUser(userInfo)
-          .then(() => {})
+          .then(() => {
+            saveUser(data.name, data.email);
+          })
           .catch((error) => console.log(error));
       })
       .catch((error) => {
@@ -35,6 +46,23 @@ const SingUp = () => {
         setSingUpError(error.message);
       });
   };
+
+  // 01 const saveUser
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => setCreatedUserEmail(email));
+  };
+
+  // 02 Verify jwt token
+  // const getUserToken = (email) => {};
 
   return (
     <div className="h-[800px] flex justify-center items-center">
@@ -98,7 +126,7 @@ const SingUp = () => {
           <input
             className="btn btn-accent w-full my-2 text-white"
             type="submit"
-            value="Login"
+            value="Register"
           />
           {singUpError && <p className="text-red-600">{singUpError}</p>}
         </form>
