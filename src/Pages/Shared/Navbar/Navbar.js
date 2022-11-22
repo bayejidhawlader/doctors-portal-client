@@ -17,15 +17,13 @@ const Navbar = () => {
       </li>
 
       <li>
-        <Link to="/">About</Link>
-      </li>
-      <li>
         <Link to="/appoinment">Appoinment</Link>
       </li>
 
       <li>
-        <Link to="/">Contsct Us</Link>
+        <Link to="/">About</Link>
       </li>
+
       {user?.uid ? (
         <>
           <li>
