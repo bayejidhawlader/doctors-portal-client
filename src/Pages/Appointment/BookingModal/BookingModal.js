@@ -6,7 +6,7 @@ import { AuthContext } from "../../../contexts/AuthProvicer";
 
 const BookingModal = ({ tretment, setTretment, selectedData, refetch }) => {
   // tretment is just another name of appoinmentOptions with name
-  const { name: tretmentName, slots } = tretment;
+  const { name: tretmentName, slots, price } = tretment;
   const date = format(selectedData, "PP");
 
   // Show email to Appoinment Modal Input Box
@@ -24,6 +24,7 @@ const BookingModal = ({ tretment, setTretment, selectedData, refetch }) => {
       tretment: tretmentName,
       slot,
       patient: name,
+      price,
       email,
       phone,
     };

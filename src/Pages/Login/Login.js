@@ -30,12 +30,12 @@ const Login = () => {
   }
 
   const handleLogin = (data) => {
-    console.log(data);
+    // console.log(data);
     setLoginError("");
     singIn(data.email, data.password)
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        // console.log(user);
         setLoginUserEmail(data.email);
       })
       .catch((error) => console.log(error.message));

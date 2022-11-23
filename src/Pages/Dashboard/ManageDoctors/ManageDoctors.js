@@ -67,30 +67,31 @@ const ManageDoctors = ({ isLoading }) => {
             </tr>
           </thead>
           <tbody>
-            {doctors?.map((doctor, i) => (
-              <tr key={doctor._id}>
-                <th>{i + 1}</th>
-                <td>
-                  <div className="avatar">
-                    <div className="w-16 rounded-full">
-                      <img alt="Doctor" src={doctor.image} />
+            {doctors?.length &&
+              doctors?.map((doctor, i) => (
+                <tr key={doctor._id}>
+                  <th>{i + 1}</th>
+                  <td>
+                    <div className="avatar">
+                      <div className="w-16 rounded-full">
+                        <img alt="Doctor" src={doctor.image} />
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>{doctor.name}</td>
-                <td>{doctor.email}</td>
-                <td>{doctor.specialty}</td>
-                <td>
-                  <label
-                    onClick={() => setDeletingDoctor(doctor)}
-                    htmlFor="conformation-modal"
-                    className="btn btn-sm btn-error"
-                  >
-                    Delete
-                  </label>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td>{doctor.name}</td>
+                  <td>{doctor.email}</td>
+                  <td>{doctor.specialty}</td>
+                  <td>
+                    <label
+                      onClick={() => setDeletingDoctor(doctor)}
+                      htmlFor="conformation-modal"
+                      className="btn btn-sm btn-error"
+                    >
+                      Delete
+                    </label>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
